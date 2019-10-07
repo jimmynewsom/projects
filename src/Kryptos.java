@@ -42,7 +42,6 @@ public class Kryptos {
     }
 
 
-
     //only works for vigenere ciphers, but assuming k4 is a "BC" cipher maybe I can use this to start to pry the key out
 
     public static String derive_key(String cipherText, String plainText) throws Exception {
@@ -59,6 +58,8 @@ public class Kryptos {
         return keyBuilder.toString();
     }
 
+
+    //trying to shift "keys" in case the value is cumulative
     public static String Kshift(String str, int n){
         String shifted = "";
         for(Character c : str.toCharArray())
@@ -92,7 +93,6 @@ public class Kryptos {
             System.out.println(k4.substring(63, 74));
 */
         }
-
 
 
 
