@@ -13,6 +13,14 @@ public class Kryptos {
 
     public static final String k1 = "EMUFPHZLRFAXYUSDJKZLDKRNSHGNFIVJYQTQUXQBQVYUVLLTREVJYQTMKYRDMFD";
 
+    public static final String k2 = "VFPJUDEEHZWETZYVGWHKKQETGFQJNCEGGWHKK?DQMCPFQZDQMMIAGPFXHQRLGTIMVMZJANQLVKQEDAGDVFRPJUNGEUNAQZGZLECGYUXUEENJTBJLBQCRTBJDFHRR" +
+            "YIZETKZEMVDUFKSJHKFWHKUWQLSZFTIHHDDDUVH?DWKBFUFPWNTDFIYCUQZEREEVLDKFEZMOQQJLTTUGSYQPFEUNLAVIDXFLGGTEZ?FKZBSFDQVGOGIPUFXHHDRKFFHQNTGPUAECNUVPDJMQCLQUMUNEDFQ" +
+            "ELZZVRRGKFFVOEEXBDMVPNFQXEZLGREDNQFMPNZGLFLPMRJQYALMGNUVPDXVKPDQUMEBEDMHDAFMJGZNUPLGEWJLLAETG";
+
+    public static final String k3 = "ENDYAHROHNLSRHEOCPTEOIBIDYSHNAIACHTNREYULDSLLSLLNOHSNOSMRWXMNETPRNGATIHNRARPESLNNELEBLPIIACAEWMTWNDITEENRAHCTENEUDRETNHAEOE" +
+            "TFOLSEDTIWENHAEIOYTEYQHEENCTAYCREIFTBRSPAMHHEWENATAMATEGYEERLBTEEFOASFIOTUETUAEOTOARMAEERTNRTIBSEDDNIAAHTTMSTEWPIEROAGRIEWFEBAECTDDHILCEIHSITEGOEAOSDDRYDLORIT" +
+            "RKLMLEHAGTDHARDPNEOHMGFMFEUHEECDMRIPFEIMEHNLSSTTRTVDOHW?";
+
     public static final String k4 = "OBKRUOXOGHULBSOLIFBBWFLRVQQPRNGKSSOTWTQSJQSSEKZZWATJKLUDIAWINFBNYPVTTMZFPKWGDKZXTJCDIGKUHUAUEKCAR";
 
     public static String encrypt_vigenere(String plainText, String key){
@@ -20,9 +28,15 @@ public class Kryptos {
         key = key.toUpperCase();
         StringBuilder cipherTextBuilder = new StringBuilder();
 
+        int j = 0;
         for(int i = 0; i < plainText.length(); i++){
-            // take the next letter and shift it by the next letter in the key
-            cipherTextBuilder.append(numberMap[(letterMap.get(plainText.charAt(i)) + letterMap.get(key.charAt(i % key.length()))) % 26]);
+            if(plainText.charAt(i) == '?')
+                cipherTextBuilder.append('?');
+            else {
+                // take the next letter and shift it by the next letter in the key
+                cipherTextBuilder.append(numberMap[(letterMap.get(plainText.charAt(i)) + letterMap.get(key.charAt(j % key.length()))) % 26]);
+                j++;
+            }
         }
 
         return cipherTextBuilder.toString();
@@ -33,9 +47,15 @@ public class Kryptos {
         key = key.toUpperCase();
         StringBuilder plainTextBuilder = new StringBuilder();
 
+        int j = 0;
         for(int i = 0; i < cipherText.length(); i++){
             // take the next letter and shift it by the next letter in the key
-            plainTextBuilder.append(numberMap[(letterMap.get(cipherText.charAt(i)) - letterMap.get(key.charAt(i % key.length())) + 26) % 26]);
+            if(cipherText.charAt(i) == '?')
+                plainTextBuilder.append('?');
+            else {
+                plainTextBuilder.append(numberMap[(letterMap.get(cipherText.charAt(i)) - letterMap.get(key.charAt(j % key.length())) + 26) % 26]);
+                j++;
+            }
         }
 
         return plainTextBuilder.toString();
@@ -68,37 +88,68 @@ public class Kryptos {
         return shifted;
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws Exception{
+        // w/o masking
         String keyGuess = "";
         try {
-            System.out.println(derive_key("BERLINCLOCK", "NYPVTTMZFPK"));
-            keyGuess = derive_key("BERLINCLOCK", "NYPVTTMZFPK");
+            keyGuess = derive_key("NFBNYPVTTMZFPK", "THEBERLINCLOCK");
+            System.out.println(keyGuess);
         }
         catch(Exception e) {
             System.out.println(e.getMessage());
         }
 
-        System.out.println();
-
-        for(int i = 0; i < 26; i++){
-            String newGuess = Kshift(keyGuess, i);
-            System.out.println("Current key: " + newGuess);
-
-/*
-            for(int j = 0; j < newGuess.length(); j++)
-                System.out.print(letterMap.get(newGuess.charAt(j)) + " ");
-                System.out.println();
+        for(int i = 0; i < 10; i++){
+            System.out.print(numberMap[(letterMap.get(keyGuess.charAt(i+1)) - letterMap.get(keyGuess.charAt(i)) + 26) % 26]);
+        }
+        System.out.println("\n");
 
 
-            System.out.println(k4.substring(63, 74));
-*/
+        //with masking
+        // L -> Q, O -> U, E -> A
+        String maskGuess = "";
+        try {
+            maskGuess = derive_key("NFBNYPVTTMZFPK", "THEBARQINCQUCK");
+            System.out.println(maskGuess);
+        }
+        catch(Exception e) {
+            System.out.println(e.getMessage());
         }
 
+        for(int i = 0; i < 10; i++){
+            System.out.print(numberMap[(letterMap.get(maskGuess.charAt(i+1)) - letterMap.get(maskGuess.charAt(i)) + 26) % 26]);
+        }
+        System.out.println("\n");
+
+
+        //testing decrypt vigenere method (it works)
+        //System.out.println(decrypt_vigenere(k1, "PALIMPSEST"));
+        //System.out.println(decrypt_vigenere(k2, "ABSCISSA"));
+
+
+        //looking for words...
+        String guess = decrypt_vigenere(k4, keyGuess +  "A");
+        System.out.println(guess.substring(0, 15));
+        System.out.println("THEBERLINCLOCKA");
+        System.out.println(guess.substring(15, 30));
+        System.out.println("THEBERLINCLOCKA");
+        System.out.println(guess.substring(30, 45));
+        System.out.println("THEBERLINCLOCKA");
+        System.out.println(guess.substring(45, 60));
+        System.out.println("THEBERLINCLOCKA");
+        System.out.println(guess.substring(60, 75));
+        System.out.println("THEBERLINCLOCKA");
+        System.out.println(guess.substring(75, k4.length()));
 
 
 
+        System.out.println();
+        System.out.println(decrypt_vigenere(k4, keyGuess + "A"));
 
-
+        //split k4 on W's (idea from internet)
+        // this is kind of a stretch, but the symmetry is kind of nice
+        String kodd =  "OBKRUOXOGHULBSOLIFBBTQSJQSSEKZZINFBNYPVTTMZFPK";
+        String keven = "FLRVQQPRNGKSSOTATJKLUDIAGDKZXTJCDIGKUHUAUEKCAR";
 
 
 
