@@ -80,7 +80,7 @@ public class Kryptos {
 
 
     //trying to shift "keys" in case the value is cumulative
-    public static String Kshift(String str, int n){
+    public static String kShift(String str, int n){
         String shifted = "";
         for(Character c : str.toCharArray())
             shifted += numberMap[(letterMap.get(c) + n) % 26];
@@ -144,7 +144,13 @@ public class Kryptos {
 
 
         System.out.println();
-        System.out.println(decrypt_vigenere(k4, keyGuess + "A"));
+        String passageGuess = decrypt_vigenere(k4, keyGuess + "A");
+
+        for(int i = 0; i < 26; i++) {
+            System.out.println(kShift(passageGuess, i).substring(0, 77));
+            System.out.println();
+        }
+
 
         //split k4 on W's (idea from internet)
         // this is kind of a stretch, but the symmetry is kind of nice
