@@ -23,6 +23,7 @@ public class Kryptos {
 
     public static final String k4 = "OBKRUOXOGHULBSOLIFBBWFLRVQQPRNGKSSOTWTQSJQSSEKZZWATJKLUDIAWINFBNYPVTTMZFPKWGDKZXTJCDIGKUHUAUEKCAR";
 
+    //technically, vigenere should take 2 keywords and use 1 to create a custom alphabet, but whatever. this assumes KRYPTOS is the first keyword
     public static String encrypt_vigenere(String plainText, String key){
         plainText = plainText.toUpperCase();
         key = key.toUpperCase();

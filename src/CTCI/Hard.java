@@ -1,3 +1,5 @@
+package CTCI;
+
 import java.util.*;
 
 public class Hard {

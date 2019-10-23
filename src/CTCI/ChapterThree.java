@@ -1,4 +1,7 @@
+package CTCI;
+
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Stack;
 
@@ -11,6 +14,12 @@ public class ChapterThree {
      */
 
     //3.2 - Stack Min
+    class StackMin<T> {
+        Stack<T> stack;
+        PriorityQueue<T> queue;
+
+
+    }
 
 
     //3.3 - Stack of Plates
